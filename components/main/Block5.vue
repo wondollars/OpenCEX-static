@@ -14,15 +14,16 @@
           </p>
           <div
             class="socials">
-            <a v-if="this.$config.axios.twitter" :href="`https://twitter.com/${this.$config.axios.twitter}`" class="social-tw">
+            <a v-if="this.$config.axios.twitter" :href="`https://twitter.com/Won_Network`" class="social-tw">
+              <!-- <a v-if="this.$config.axios.twitter" :href="`https://twitter.com/${this.$config.axios.twitter}`" class="social-tw"></a> -->
               <img src="/img/1.png" />
               <span>{{this.$config.axios.twitter}}</span>
             </a>
-            <a v-if="this.$config.axios.telegram" :href="`https://t.me/${this.$config.axios.telegram}`" class="social-tg">
+            <a v-if="this.$config.axios.telegram" :href="`https://t.me/WonCommunity`" class="social-tg">
               <img src="/img/2.png" />
               <span>{{this.$config.axios.telegram}}</span>
             </a>
-            <a v-if="this.$config.axios.facebook" :href="`https://facebook.com/${this.$config.axios.facebook}`" class="social-fb">
+            <a v-if="this.$config.axios.facebook" :href="`https://www.facebook.com/WonNetworkEcoSystem`" class="social-fb">
               <img src="/img/3.png" />
               <span>{{this.$config.axios.facebook}}</span>
             </a>
