@@ -60,12 +60,12 @@ meter {
 
 body {
   color: #000;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Courier New', Courier, monospace;
   background: #FFF;
   font-weight: 400;
 }
 * {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Courier New', Courier, monospace;
   font-weight: 400;
 }
 .table td, .table th,
