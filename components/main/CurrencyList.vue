@@ -40,9 +40,9 @@
               <a>{{ pair.pair_data.base.code }}</a
               >
             </td>
-            <td>{{ pair.price ? pair.price.toFixed(2) : '-' }} USDT</td>
+            <td>{{ pair.price ? pair.price.toFixed(8) : '-' }} USD</td>
             <td>
-              {{ pair.volume ? pair.volume.toFixed(2) : '-' }} USDT
+              {{ pair.volume ? pair.volume.toFixed(4) : '-' }} USD
             </td>
             <td :class="[pair.price_24h >= 0 ? 'text-green' : 'text-red']">
               <span v-if="pair?.price_24h">
