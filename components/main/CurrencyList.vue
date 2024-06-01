@@ -41,7 +41,7 @@
             </td>
             <td>{{ pair.price ? (pair.price > 1 ? pair.price.toFixed(2) : pair.price) : '-' }} USD</td>
             <td>
-              {{ pair.volume ? pair.volume.toFixed(6) : '-' }} USD
+              {{ pair.volume ? pair.volume.toFixed(2) : '-' }} USD
             </td>
             <td :class="[pair.price_24h >= 0 ? 'text-green' : 'text-red']">
               <span v-if="pair?.price_24h">
