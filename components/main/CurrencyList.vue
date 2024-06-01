@@ -1,10 +1,10 @@
 <template>
-	<div class="currency-list-main-page">
+  <div class="currency-list-main-page">
     <div class="chart-section-table-responsive table-responsive table-responsive--main">
       <div class="mobCurrencyList">
         <div v-for="pair in filteredPairs" :key="pair.volume" class="mobCurrencyList-item">
           <div class="mobCurrencyList-head">
-           <span v-if="pair.pair_data.base.code" style="color: #50B1F9;">
+            <span v-if="pair.pair_data.base.code" style="color: #50B1F9;">
               {{ pair.pair_data.base.code }}
               <span style="color: #1B1A1A; font-weight: 300">{{ pair?.pair_data?.base?.name?.name }}</span>
             </span>
@@ -12,7 +12,7 @@
           <div class="mobCurrencyList-body">
             <div>
               <strong>{{ $t('price') }}</strong><br/>
-              {{ pair.price ? pair.price.toFixed(2) : '-' }} USDT
+              {{ pair.price ? (pair.price > 1 ? pair.price.toFixed(2) : pair.price) : '-' }} USDT
             </div>
             <div>
               <strong>{{ $t('vol24h') }}</strong> <br/>
@@ -37,12 +37,11 @@
         <tbody>
           <tr v-for="pair in filteredPairs" :key="pair.volume">
             <td class="text-bold" style="padding-left: 20px">
-              <a>{{ pair.pair_data.base.code }}</a
-              >
+              <a>{{ pair.pair_data.base.code }}</a>
             </td>
-            <td>{{ pair.price ? pair.price.toFixed(8) : '-' }} USD</td>
+            <td>{{ pair.price ? (pair.price > 1 ? pair.price.toFixed(2) : pair.price) : '-' }} USD</td>
             <td>
-              {{ pair.volume ? pair.volume.toFixed(4) : '-' }} USD
+              {{ pair.volume ? pair.volume.toFixed(6) : '-' }} USD
             </td>
             <td :class="[pair.price_24h >= 0 ? 'text-green' : 'text-red']">
               <span v-if="pair?.price_24h">
@@ -53,27 +52,35 @@
         </tbody>
       </table>
     </div>
-	</div>
+  </div>
 </template>
 
 <script>
-
 export default {
-	props: ['filteredPairs'],
-	computed: {
-		getCurrentLang() {
-			return this.$store.getters.lang;
-		},
-	}
+  props: {
+    filteredPairs: {
+      type: Array,
+      required: true
+    },
+    defaultPair: {
+      type: Object,
+      default: () => ({}) // Đặt giá trị mặc định là một object rỗng cho defaultPair
+    }
+  },
+  computed: {
+    getCurrentLang() {
+      return this.$store.getters.lang;
+    }
+  }
 }
 </script>
 
 <style scoped>
 .currency-list-main-page {
-	width: 100%;
-	color: rgb(62, 71, 95);
-	margin-left: auto;
-	margin-right: auto;
+  width: 100%;
+  color: rgb(62, 71, 95);
+  margin-left: auto;
+  margin-right: auto;
   background: #fff;
   box-shadow: 0px 0px 60px rgba(110, 127, 162, 0.15);
   border-radius: 10px;
@@ -104,7 +111,7 @@ thead tr th {
   padding-bottom: 30px;
 }
 .text-bold a {
-	font-size: 16px;
+  font-size: 16px;
 }
 .mobCurrencyList {
   display: none;
@@ -141,7 +148,6 @@ thead tr th {
 .text-green {
   color: #5FAB62;
 }
-
 @media (max-width: 600px) {
   .mobCurrencyList {
     font-size: 11px;
