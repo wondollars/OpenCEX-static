@@ -70,7 +70,7 @@ export default {
   sell: 'Sell',
   including_commission: 'Including commission',
   exchange_button: 'Exchange',
-  bitcoin_price: 'Bitcoin Currency Price: BTC/USDT',
+  bitcoin_price: 'Bitcoin Currency Price: BTC/USD',
   buy_with_coin: 'Buy {coin}',
   name: 'Name',
   last_price: 'Last price',

@@ -12,14 +12,14 @@
           <div class="mobCurrencyList-body">
             <div>
               <strong>{{ $t('price') }}</strong><br/>
-              {{ pair.price ? (pair.price > 1 ? pair.price.toFixed(2) : pair.price) : '-' }} USDT
+              {{ pair.price ? formatPrice(pair.price) : '-' }} USDT
             </div>
             <div>
-              <strong>{{ $t('vol24h') }}</strong> <br/>
-              {{ pair.volume ? pair.volume.toFixed(2) : '-' }} USDT
+              <strong>{{ $t('vol24h') }}</strong><br/>
+              {{ pair.volume ? formatVolume(pair.volume) : '-' }} USDT
             </div>
             <div>
-              <strong>{{ $t('price24h') }}</strong> <br/>
+              <strong>{{ $t('price24h') }}</strong><br/>
               <span :class="[pair.price_24h >= 0 ? 'text-green' : 'text-red']">{{ pair.price_24h.toFixed(2) }}%</span>
             </div>
           </div>
@@ -39,10 +39,8 @@
             <td class="text-bold" style="padding-left: 20px">
               <a>{{ pair.pair_data.base.code }}</a>
             </td>
-            <td>{{ pair.price ? (pair.price > 1 ? pair.price.toFixed(2) : pair.price) : '-' }} USD</td>
-            <td>
-              {{ pair.volume ? pair.volume.toFixed(2) : '-' }} USD
-            </td>
+            <td>{{ pair.price ? formatPrice(pair.price) : '-' }} USD</td>
+            <td>{{ pair.volume ? formatVolume(pair.volume) : '-' }} USD</td>
             <td :class="[pair.price_24h >= 0 ? 'text-green' : 'text-red']">
               <span v-if="pair?.price_24h">
                 {{ pair.price_24h.toFixed(2) }}%
@@ -65,6 +63,22 @@ export default {
     defaultPair: {
       type: Object,
       default: () => ({}) // Đặt giá trị mặc định là một object rỗng cho defaultPair
+    }
+  },
+  methods: {
+    formatPrice(value) {
+      if (value > 1) {
+        return value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      } else {
+        return value.toString();
+      }
+    },
+    formatVolume(value) {
+      if (value > 1) {
+        return value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      } else {
+        return value.toString();
+      }
     }
   },
   computed: {
@@ -94,7 +108,7 @@ export default {
   background-color: #F8FAFD;
 }
 thead tr th {
-  background: #6352CD !important;
+  background: #2fb17f !important;
   padding-top: 25px;
   padding-bottom: 20px;
   color: #FFF;
@@ -140,7 +154,7 @@ thead tr th {
   padding-top: 20px;
 }
 .mobCurrencyList-item:nth-of-type(odd) {
-  background: #F8FAFD;
+  background: #e3f7f5;
 }
 .text-red {
   color: #E92323;

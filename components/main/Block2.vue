@@ -40,7 +40,7 @@ body h2 {
   width: 98px;
   height: 4px;
   margin: 20px 0 32px;
-  background: #6352CD;
+  background: #0a84cb;
 }
 .block3-img {
   position: relative;

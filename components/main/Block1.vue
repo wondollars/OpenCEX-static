@@ -3,6 +3,7 @@
     <div class="content">
       <div class="grid grid-cols-2 block1">
         <div class="block1-left">
+          <img src="/mnt/data/image.png" alt="WonCex Logo" class="logo"/>
           <h1>Start Your Crypto Business</h1>
           <p class="block-text">Trade crypto in the easiest and safest way!</p>
           <p class="block-text">Won Chain Built-in!</p>
@@ -19,16 +20,22 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   props: ['course']
 }
 </script>
+
 <style>
 .main-top-wrapper {
-  background: #292256;
+  background: #1a2b34; /* Màu nền xanh lá cây đậm hơn */
   position: relative;
   padding: 157px 0 88px;
+}
+.logo {
+  display: block;
+  margin-bottom: 20px;
 }
 body h1 {
   color: #fff;
@@ -54,6 +61,19 @@ body h1 {
   position: relative;
   left: 2px;
   top: 1px;
+}
+.btn {
+  background-color: #50B1F9; /* Màu nút xanh dương */
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px 30px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+.btn:hover {
+  background-color: #1E90FF; /* Màu khi hover */
 }
 @media(max-width: 900px) {
   .block1 {

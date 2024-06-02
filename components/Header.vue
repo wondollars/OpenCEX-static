@@ -158,6 +158,7 @@ export default {
   top: 0;
   width: 100%;
   z-index: 2;
+  background: #1a2b34; /* Nền xanh lá cây đậm hơn */
 }
 .header__etc {
   padding-top: 6px;
@@ -174,7 +175,7 @@ export default {
   right: 0;
   display: block;
   width: 151%;
-  background: #FFF;
+  background: #fff; /* Nền trắng */
   box-shadow: 0 0 2px 1px #00000040;
 }
 .navigation__item {
@@ -198,13 +199,13 @@ export default {
   position: absolute;
   top: 51px;
   left: 0;
-  border: 1px solid #483D89;
+  border: 1px solid #1a2b34; /* Màu xanh lá cây đậm */
   width: 100%;
   padding: 10px 20px;
-  background: #6053C6;
+  background: #1a2b34; /* Màu xanh lá cây đậm */
 }
 .navigation-language__link {
-  color: #FFF;
+  color: #fff;
   text-transform: capitalize;
   cursor: pointer;
   display: block;
@@ -216,7 +217,7 @@ export default {
 .header-btn {
   width: 102px;
   height: 46px;
-  border: 1px solid #483D89;
+  border: 1px solid #1a2b34; /* Màu xanh lá cây đậm */
   border-radius: 5px;
   text-align: center;
   color: #fff;
@@ -232,7 +233,7 @@ export default {
 .header__language-current {
   width: 102px;
   height: 46px;
-  border: 1px solid #483D89;
+  border: 1px solid #1a2b34; /* Màu xanh lá cây đậm */
   border-radius: 5px;
   text-align: center;
   color: #fff;
@@ -245,7 +246,7 @@ export default {
   margin-left: 20px;
   width: 130px;
   height: 46px;
-  background: #6352CD;
+  background: #50B1F9; /* Màu xanh dương */
   border-radius: 5px;
   color: #fff;
   display: flex;
@@ -276,7 +277,7 @@ export default {
     display: none;
   }
   .header {
-    background: #FFF;
+    background: #fff; /* Nền trắng cho di động */
     padding-top: 8px;
   }
   .header__logo {
