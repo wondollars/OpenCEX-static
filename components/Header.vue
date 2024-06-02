@@ -65,6 +65,12 @@
                 {{ $t('fees') }}
               </a>
             </li>
+            <li class="navigation__item">
+              <a href="https://wonnetwork.org" class="navigation__link">
+                <img class="navigation__link__img" width="20" height="20" src="/public/img/menu/list-ul.svg">
+                {{ $t('Home Page') }}
+              </a>
+            </li>
           </ul>
         </div>
       </div>
