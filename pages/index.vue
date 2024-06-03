@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <CurrencyList :filteredPairs="filteredPairs" :pairChanges="pairChanges" />
+        <CurrencyList :filteredPairs="filteredPairs" />
       </div>
     </div>
     <Block4 />
@@ -69,26 +69,21 @@ export default {
     };
   },
   mixins: [numberFormatter],
-  data() {
-    return {
-      intervalId: null,
-    };
-  },
   updated() {
     if (this.dataGraph.length) {
       this.drawGraph();
     }
   },
   async mounted() {
-    await this.getData();
-    this.intervalId = setInterval(this.getData, 1000);
-  },
-  beforeDestroy() {
-    clearInterval(this.intervalId);
+    this.$store.dispatch("getInfoMainPage");
+    this.$store.dispatch("getGraphInfo");
+    if (this.dataGraph.length) {
+      this.drawGraph();
+    }
   },
   computed: {
     p1() {
-      return this.getPairs["USDT-RUB"]?.price.toFixed(2);
+      return this.getPairs["USDT-RUB"]?.price.toFixed(2)
     },
     dataGraph() {
       return this.$store.state.dataGraph;
@@ -100,10 +95,7 @@ export default {
       return this.$store.getters.info;
     },
     getPairs() {
-      return this.$store.getters.pairsData;
-    },
-    pairChanges() {
-      return this.$store.state.pairChanges;
+      return this.$store.getters.pairs_data;
     },
     filteredPairs() {
       if (this.getPairs) {
@@ -114,13 +106,6 @@ export default {
     },
   },
   methods: {
-    async getData() {
-      await this.$store.dispatch("getInfoMainPage");
-      await this.$store.dispatch("getGraphInfo");
-      if (this.dataGraph.length) {
-        this.drawGraph();
-      }
-    },
     drawGraph() {
       const monthNames = [
         "Jan",
@@ -166,7 +151,7 @@ export default {
             formatter: function () {
               let date = new Date(this.value);
               if (date.getUTCHours()) {
-                return;
+                  return;
               }
               return date.getDate() + " " + monthNames[date.getMonth()];
             },
@@ -200,7 +185,7 @@ export default {
             type: "areaspline",
             color: "#FFF",
             fillOpacity: 0.2,
-            lineColor: "#50B1F9", // Màu xanh dương
+            lineColor: "#6352CD",
             tooltip: {
               valueDecimals: 2,
             },
@@ -218,10 +203,9 @@ body h3 {
   font-weight: 700;
   font-size: 42px;
   line-height: 60px;
-  
 }
 .trade {
-  background: #EEF1F9; /* Nền xanh lá cây đậm */
+  background: #EEF1F9;
   padding: 114px 0 138px;
 }
 .graph-wrapper {
@@ -234,11 +218,9 @@ body h3 {
   font-size: 24px;
   line-height: 35px;
   padding: 10px;
-  
 }
 .trade-title {
   padding-bottom: 52px;
-   
 }
 @media (max-width: 900px) {
   .trade {
