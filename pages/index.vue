@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <CurrencyList :filteredPairs="filteredPairs" />
+        <CurrencyList :filteredPairs="filteredPairs" :pairChanges="pairChanges" />
       </div>
     </div>
     <Block4 />
@@ -69,21 +69,27 @@ export default {
     };
   },
   mixins: [numberFormatter],
+  data() {
+    return {
+      intervalId: null,
+      filteredPairs: [] // Khởi tạo giá trị mặc định là một mảng rỗng
+    };
+  },
   updated() {
     if (this.dataGraph.length) {
       this.drawGraph();
     }
   },
   async mounted() {
-    this.$store.dispatch("getInfoMainPage");
-    this.$store.dispatch("getGraphInfo");
-    if (this.dataGraph.length) {
-      this.drawGraph();
-    }
+    await this.getData();
+    this.intervalId = setInterval(this.getData, 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
   },
   computed: {
     p1() {
-      return this.getPairs["USDT-RUB"]?.price.toFixed(2)
+      return this.getPairs["USDT-RUB"]?.price.toFixed(2);
     },
     dataGraph() {
       return this.$store.state.dataGraph;
@@ -95,17 +101,54 @@ export default {
       return this.$store.getters.info;
     },
     getPairs() {
-      return this.$store.getters.pairs_data;
+      return this.$store.getters.pairsData || {}; // Đảm bảo giá trị mặc định là một object rỗng
     },
-    filteredPairs() {
-      if (this.getPairs) {
-        return Object.values(this.getPairs).filter((pair) => {
-          return pair.pair_data.quote.code !== "USDT" ? false : pair;
-        });
+    pairChanges() {
+      return this.$store.state.pairChanges;
+    }
+  },
+  watch: {
+    getPairs: {
+      immediate: true,
+      handler(newPairs) {
+        if (newPairs) {
+          this.filteredPairs = Object.values(newPairs).filter((pair) => pair.pair_data.quote.code === "USDT");
+        } else {
+          this.filteredPairs = [];
+        }
       }
-    },
+    }
   },
   methods: {
+    async getData() {
+      const previousPairs = { ...this.getPairs };
+      await this.$store.dispatch("getInfoMainPage");
+      await this.$store.dispatch("getGraphInfo");
+
+      if (this.dataGraph.length) {
+        this.drawGraph();
+      }
+
+      // Check for price changes and update pairChanges
+      const updatedPairs = this.getPairs;
+      Object.keys(updatedPairs).forEach((pair) => {
+        if (previousPairs[pair] && previousPairs[pair].price !== updatedPairs[pair].price) {
+          this.$store.commit('SET_PAIR_CHANGE', {
+            pair: updatedPairs[pair].pair_data.base.code,
+            changed: {
+              previousPrice: previousPairs[pair].price,
+              currentPrice: updatedPairs[pair].price
+            }
+          });
+          setTimeout(() => {
+            this.$store.commit('SET_PAIR_CHANGE', {
+              pair: updatedPairs[pair].pair_data.base.code,
+              changed: null
+            });
+          }, 500); // Reset change indicator after 500ms
+        }
+      });
+    },
     drawGraph() {
       const monthNames = [
         "Jan",
@@ -151,7 +194,7 @@ export default {
             formatter: function () {
               let date = new Date(this.value);
               if (date.getUTCHours()) {
-                  return;
+                return;
               }
               return date.getDate() + " " + monthNames[date.getMonth()];
             },
@@ -185,7 +228,7 @@ export default {
             type: "areaspline",
             color: "#FFF",
             fillOpacity: 0.2,
-            lineColor: "#6352CD",
+            lineColor: "#50B1F9", // Màu xanh dương
             tooltip: {
               valueDecimals: 2,
             },

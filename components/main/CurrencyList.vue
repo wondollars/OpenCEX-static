@@ -12,7 +12,9 @@
           <div class="mobCurrencyList-body">
             <div>
               <strong>{{ $t('price') }}</strong><br/>
-              {{ pair.price ? formatPrice(pair.price) : '-' }} USDT
+              <span :class="getPriceChangeClass(pair.pair_data.base.code, pair.price)">
+                {{ pair.price ? formatPrice(pair.price) : '-' }} USDT
+              </span>
             </div>
             <div>
               <strong>{{ $t('vol24h') }}</strong><br/>
@@ -39,7 +41,9 @@
             <td class="text-bold" style="padding-left: 20px">
               <a>{{ pair.pair_data.base.code }}</a>
             </td>
-            <td>{{ pair.price ? formatPrice(pair.price) : '-' }} USD</td>
+            <td :class="getPriceChangeClass(pair.pair_data.base.code, pair.price)">
+              {{ pair.price ? formatPrice(pair.price) : '-' }} USD
+            </td>
             <td>{{ pair.volume ? formatVolume(pair.volume) : '-' }} USD</td>
             <td :class="[pair.price_24h >= 0 ? 'text-green' : 'text-red']">
               <span v-if="pair?.price_24h">
@@ -60,6 +64,10 @@ export default {
       type: Array,
       required: true
     },
+    pairChanges: {
+      type: Object,
+      default: () => ({})
+    },
     defaultPair: {
       type: Object,
       default: () => ({}) // Đặt giá trị mặc định là một object rỗng cho defaultPair
@@ -79,6 +87,17 @@ export default {
       } else {
         return value.toString();
       }
+    },
+    getPriceChangeClass(pairCode, price) {
+      const change = this.pairChanges[pairCode];
+      if (change) {
+        if (price > change.previousPrice) {
+          return 'price-up';
+        } else if (price < change.previousPrice) {
+          return 'price-down';
+        }
+      }
+      return '';
     }
   },
   computed: {
@@ -161,6 +180,21 @@ thead tr th {
 }
 .text-green {
   color: #5FAB62;
+}
+.price-up {
+  color: green;
+  animation: flash 0.5s;
+}
+
+.price-down {
+  color: red;
+  animation: flash 0.5s;
+}
+
+@keyframes flash {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
 }
 @media (max-width: 600px) {
   .mobCurrencyList {
