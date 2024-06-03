@@ -49,46 +49,41 @@ export default {
   head() {
     return {
       title: `${this.$config.axios.title} ${this.$t('title')}`,
-      meta: [
-        {
-          hid: "description",
-          name: "description",
-          content: `${this.$config.axios.title} ${this.$t("metaMainDescr")}`,
-        },
-        {
-          hid: "og:title",
-          name: "og:title",
-          content: `${this.$config.axios.title} ${this.$t("metaMainTitle")}`,
-        },
-        {
-          hid: "og:description",
-          name: "og:description",
-          content: `${this.$config.axios.title} ${this.$t("metaMainDescr")}`,
-        },
-      ],
+        meta: [
+            {
+                hid: "description",
+                name: "description",
+                content: `${this.$config.axios.title} ${this.$t("metaMainDescr")}`,
+            },
+            {
+                hid: "og:title",
+                name: "og:title",
+                content: `${this.$config.axios.title} ${this.$t("metaMainTitle")}`,
+            },
+            {
+                hid: "og:description",
+                name: "og:description",
+                content: `${this.$config.axios.title} ${this.$t("metaMainDescr")}`,
+            },
+        ],
     };
   },
   mixins: [numberFormatter],
-  data() {
-    return {
-      intervalId: null,
-    };
-  },
   updated() {
     if (this.dataGraph.length) {
       this.drawGraph();
     }
   },
   async mounted() {
-    await this.getData();
-    this.intervalId = setInterval(this.getData, 5000); // Gọi API mỗi 5000ms (5 giây)
-  },
-  beforeDestroy() {
-    clearInterval(this.intervalId);
+    this.$store.dispatch("getInfoMainPage");
+    this.$store.dispatch("getGraphInfo");
+    if (this.dataGraph.length) {
+      this.drawGraph();
+    }
   },
   computed: {
     p1() {
-      return this.getPairs["USDT-RUB"]?.price.toFixed(2);
+      return this.getPairs["USDT-RUB"]?.price.toFixed(2)
     },
     dataGraph() {
       return this.$store.state.dataGraph;
@@ -100,23 +95,17 @@ export default {
       return this.$store.getters.info;
     },
     getPairs() {
-      return this.$store.getters.pairsData || {}; // Đảm bảo giá trị mặc định là một object rỗng
+      return this.$store.getters.pairs_data;
     },
     filteredPairs() {
       if (this.getPairs) {
-        return Object.values(this.getPairs).filter((pair) => pair.pair_data.quote.code === "USDT");
-      }
-      return []; // Đảm bảo trả về một mảng rỗng nếu không có giá trị
-    }
-  },
-  methods: {
-    async getData() {
-      await this.$store.dispatch("getInfoMainPage");
-      await this.$store.dispatch("getGraphInfo");
-      if (this.dataGraph.length) {
-        this.drawGraph();
+        return Object.values(this.getPairs).filter((pair) => {
+          return pair.pair_data.quote.code !== "USDT" ? false : pair;
+        });
       }
     },
+  },
+  methods: {
     drawGraph() {
       const monthNames = [
         "Jan",
@@ -162,7 +151,7 @@ export default {
             formatter: function () {
               let date = new Date(this.value);
               if (date.getUTCHours()) {
-                return;
+                  return;
               }
               return date.getDate() + " " + monthNames[date.getMonth()];
             },
