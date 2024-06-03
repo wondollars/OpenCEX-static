@@ -82,7 +82,7 @@ export default {
   },
   async mounted() {
     await this.getData();
-    this.intervalId = setInterval(this.getData, 1000);
+    this.intervalId = setInterval(this.getData, 5000);
   },
   beforeDestroy() {
     clearInterval(this.intervalId);
