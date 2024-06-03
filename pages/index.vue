@@ -72,7 +72,6 @@ export default {
   data() {
     return {
       intervalId: null,
-      filteredPairs: [] // Khởi tạo giá trị mặc định là một mảng rỗng
     };
   },
   updated() {
@@ -82,7 +81,7 @@ export default {
   },
   async mounted() {
     await this.getData();
-    this.intervalId = setInterval(this.getData, 5000);
+    this.intervalId = setInterval(this.getData, 1000);
   },
   beforeDestroy() {
     clearInterval(this.intervalId);
@@ -101,53 +100,26 @@ export default {
       return this.$store.getters.info;
     },
     getPairs() {
-      return this.$store.getters.pairsData || {}; // Đảm bảo giá trị mặc định là một object rỗng
+      return this.$store.getters.pairsData;
     },
     pairChanges() {
       return this.$store.state.pairChanges;
-    }
-  },
-  watch: {
-    getPairs: {
-      immediate: true,
-      handler(newPairs) {
-        if (newPairs) {
-          this.filteredPairs = Object.values(newPairs).filter((pair) => pair.pair_data.quote.code === "USDT");
-        } else {
-          this.filteredPairs = [];
-        }
+    },
+    filteredPairs() {
+      if (this.getPairs) {
+        return Object.values(this.getPairs).filter((pair) => {
+          return pair.pair_data.quote.code !== "USDT" ? false : pair;
+        });
       }
-    }
+    },
   },
   methods: {
     async getData() {
-      const previousPairs = { ...this.getPairs };
       await this.$store.dispatch("getInfoMainPage");
       await this.$store.dispatch("getGraphInfo");
-
       if (this.dataGraph.length) {
         this.drawGraph();
       }
-
-      // Check for price changes and update pairChanges
-      const updatedPairs = this.getPairs;
-      Object.keys(updatedPairs).forEach((pair) => {
-        if (previousPairs[pair] && previousPairs[pair].price !== updatedPairs[pair].price) {
-          this.$store.commit('SET_PAIR_CHANGE', {
-            pair: updatedPairs[pair].pair_data.base.code,
-            changed: {
-              previousPrice: previousPairs[pair].price,
-              currentPrice: updatedPairs[pair].price
-            }
-          });
-          setTimeout(() => {
-            this.$store.commit('SET_PAIR_CHANGE', {
-              pair: updatedPairs[pair].pair_data.base.code,
-              changed: null
-            });
-          }, 500); // Reset change indicator after 500ms
-        }
-      });
     },
     drawGraph() {
       const monthNames = [
@@ -246,9 +218,10 @@ body h3 {
   font-weight: 700;
   font-size: 42px;
   line-height: 60px;
+  
 }
 .trade {
-  background: #EEF1F9;
+  background: #EEF1F9; /* Nền xanh lá cây đậm */
   padding: 114px 0 138px;
 }
 .graph-wrapper {
@@ -261,9 +234,11 @@ body h3 {
   font-size: 24px;
   line-height: 35px;
   padding: 10px;
+  
 }
 .trade-title {
   padding-bottom: 52px;
+   
 }
 @media (max-width: 900px) {
   .trade {
