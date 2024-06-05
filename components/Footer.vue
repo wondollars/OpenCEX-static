@@ -44,7 +44,7 @@
               {{ this.$config.axios.linkedin }}
             </a>
           </div>
-          <div class="footer-langs">
+          <!-- <div class="footer-langs">
             <div class="footer-langs-btn" @click.stop="toggleLangMenu">
               <span>Eng</span>
               <img class="header__language-arr" src="/img/arr-b.svg" />
@@ -61,7 +61,7 @@
                 >
               </li>
             </ul>
-          </div>
+          </div> -->
         </div>
         <div class="footer-links">
           <div class="footer-links-column">
